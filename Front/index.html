@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Blockchain Messenger</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #output { border: 1px solid #ccc; padding: 15px; margin-top: 20px; background: #f9f9f9; white-space: pre-wrap; max-height: 400px; overflow-y: scroll;}
+        h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        input[type="text"] { width: 80%; padding: 10px; margin-right: 10px; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        .block { border: 1px solid #eee; padding: 10px; margin-bottom: 10px; background-color: white; }
+    </style>
+</head>
+<body>
+
+    <h1>📝 Add Message to the Chain</h1>
+
+    <div>
+        <input type="text" id="messageInput" placeholder="Type your secret message here...">
+        <button onclick="addBlock()">Add Block</button>
+    </div>
+
+    <hr>
+
+    <h2>🔗 Blockchain Contents</h2>
+    <button onclick="fetchChain()">Refresh Chain</button>
+    <div id="output">
+        Chain will appear here...
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5057/blockchain'; 
+
+        // --- Function to add a new block (POST) ---
+        async function addBlock() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert("Please enter a message!");
+                return;
+            }
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // Send the raw string message in the request body
+                    body: JSON.stringify(message)
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`✅ Block Added! Data: "${result.NewBlock.Data}". New Block Hash Starts with: ${result.NewBlock.hash.substring(0, 10)}...`);
+                    messageInput.value = ''; // Clear input
+                    fetchChain(); // Refresh the display
+                } else {
+                    alert(`Error adding block: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Could not connect to C# server.');
+            }
+        }
+
+        // --- Function to fetch the entire chain (GET) ---
+        async function fetchChain() {
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = 'Loading chain...';
+
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    const chain = await response.json();
+                    
+                    let html = '';
+                    chain.forEach((block, index) => {
+                        html += `
+                            <div class="block">
+                                <strong>Block #${index}</strong><br>
+                                <strong>Data:</strong> ${block.data}<br>
+                                <strong>Timestamp:</strong> ${new Date(block.timestamp).toLocaleString()}<br>
+                                <strong>Previous Hash:</strong> <span style="color: #6c757d;">${block.previousHash.substring(0, 15)}...</span><br>
+                                <strong>Block Hash:</strong> <span style="color: #28a745;">${block.hash}</span>
+                            </div>
+                        `;
+                    });
+                    outputDiv.innerHTML = html;
+                } else {
+                    outputDiv.innerHTML = `Error fetching chain: ${response.statusText}`;
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                outputDiv.innerHTML = 'Could not connect to C# server. Please ensure it is running.';
+            }
+        }
+
+        // Load the chain when the page first opens
+        document.addEventListener('DOMContentLoaded', fetchChain);
+    </script>
+
+</body>
+</html>
