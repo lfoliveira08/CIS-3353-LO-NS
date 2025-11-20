@@ -33,39 +33,48 @@
     <script>
         const API_URL = 'http://localhost:5057/blockchain'; 
 
-        // --- Function to add a new block (POST) ---
-        async function addBlock() {
-            const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();
+    // --- Function to add a new block (POST) ---
+    async function addBlock() {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value.trim();
 
-            if (!message) {
-                alert("Please enter a message!");
-                return;
-            }
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    // Send the raw string message in the request body
-                    body: JSON.stringify(message)
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    alert(`✅ Block Added! Data: "${result.NewBlock.Data}". New Block Hash Starts with: ${result.NewBlock.hash.substring(0, 10)}...`);
-                    messageInput.value = ''; // Clear input
-                    fetchChain(); // Refresh the display
-                } else {
-                    alert(`Error adding block: ${response.statusText}`);
-                }
-            } catch (error) {
-                console.error('Fetch error:', error);
-                alert('Could not connect to C# server.');
-            }
+        if (!message) {
+            alert("Please enter a message!");
+            return;
         }
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    // Ensure the server knows we are sending JSON
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify(message) 
+            });
+            
+            // Check for common CORS or connection issues first (status 0)
+            if (response.status === 0 && response.type === 'opaque') {
+                throw new Error("Possible CORS failure or network issue (Status 0).");
+            }
+            
+            // Check for specific API error status codes (400, 500, etc.)
+            if (response.ok) {
+                const result = await response.json();
+                alert(`✅ Block Added! Data: "${result.newBlock.data}". New Block Hash Starts with: ${result.newBlock.hash.substring(0, 10)}...`);
+                messageInput.value = ''; // Clear input
+                fetchChain(); // Refresh the display
+            } else {
+                // Check for a specific error message from the API
+                let errorText = await response.text();
+                alert(`Error adding block (Status: ${response.status}): ${errorText.substring(0, 100)}...`);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            
+            alert('Could not connect to C# server. (Network/CORS/Server issue)');
+        }
+    }
 
         // --- Function to fetch the entire chain (GET) ---
         async function fetchChain() {
