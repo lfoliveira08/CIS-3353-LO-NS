@@ -83,19 +83,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lfoli\\.nuget\\packages\\": {}
+    "C:\\Users\\Gringo\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lfoli\\OneDrive\\Desktop\\cssss\\CIS-3353-LO-NS\\SimpleBlockchainAPI.csproj",
+      "projectUniqueName": "C:\\Facul\\CSS\\Atual\\CIS-3353-LO-NS\\SimpleBlockchainAPI.csproj",
       "projectName": "SimpleBlockchainAPI",
-      "projectPath": "C:\\Users\\lfoli\\OneDrive\\Desktop\\cssss\\CIS-3353-LO-NS\\SimpleBlockchainAPI.csproj",
-      "packagesPath": "C:\\Users\\lfoli\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lfoli\\OneDrive\\Desktop\\cssss\\CIS-3353-LO-NS\\obj\\",
+      "projectPath": "C:\\Facul\\CSS\\Atual\\CIS-3353-LO-NS\\SimpleBlockchainAPI.csproj",
+      "packagesPath": "C:\\Users\\Gringo\\.nuget\\packages\\",
+      "outputPath": "C:\\Facul\\CSS\\Atual\\CIS-3353-LO-NS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\lfoli\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Gringo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

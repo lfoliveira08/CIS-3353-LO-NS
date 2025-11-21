@@ -17,7 +17,7 @@ namespace SimpleBlockchainAPI.Models
         public string PreviousHash { get; set; } = string.Empty;
         
         // 4. Current Block's Hash
-        [JsonIgnore] public string Hash { get; private set; } = string.Empty;
+        public string Hash { get; private set; } = string.Empty;
 
         public Block(string data, string previousHash)
         {

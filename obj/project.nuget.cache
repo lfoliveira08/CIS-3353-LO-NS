@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "VNB22hqsaNY=",
+  "dgSpecHash": "RDmGrZo835E=",
   "success": true,
-  "projectFilePath": "C:\\Users\\lfoli\\OneDrive\\Desktop\\cssss\\CIS-3353-LO-NS\\SimpleBlockchainAPI.csproj",
+  "projectFilePath": "C:\\Facul\\CSS\\Atual\\CIS-3353-LO-NS\\SimpleBlockchainAPI.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\lfoli\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.0-rc.2.25502.107\\microsoft.aspnetcore.openapi.10.0.0-rc.2.25502.107.nupkg.sha512",
-    "C:\\Users\\lfoli\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+    "C:\\Users\\Gringo\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.0-rc.2.25502.107\\microsoft.aspnetcore.openapi.10.0.0-rc.2.25502.107.nupkg.sha512",
+    "C:\\Users\\Gringo\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
   ],
   "logs": []
 }
