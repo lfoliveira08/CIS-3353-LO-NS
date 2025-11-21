@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SimpleBlockchainAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+81febdb2546ec07ed9826763c28a2ccd83790c37")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e9a18f8726a022a9f2fc0c0b63525c6e0d91158")]
 [assembly: System.Reflection.AssemblyProductAttribute("SimpleBlockchainAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SimpleBlockchainAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
