@@ -12,12 +12,15 @@ namespace SimpleBlockchainAPI.Models
 
         // 2. Metadata
         public DateTime Timestamp { get; set; } = DateTime.Now;
-        
+
         // 3. Chain Integrity
         public string PreviousHash { get; set; } = string.Empty;
-        
+
         // 4. Current Block's Hash
         public string Hash { get; private set; } = string.Empty;
+        
+        // 5. Salt/Nonce (New addition)
+        public int Nonce { get; private set; } = 0;
 
         public Block(string data, string previousHash)
         {
@@ -30,7 +33,7 @@ namespace SimpleBlockchainAPI.Models
         public string CalculateHash()
         {
             // Concatenate all data fields for hashing
-            string rawData = $"{Timestamp.ToString("yyyyMMddHHmmssffff")}-{PreviousHash}-{Data}";
+            string rawData = $"{Timestamp.ToString("yyyyMMddHHmmssffff")}-{PreviousHash}-{Data}-{Nonce}";
             
             // Generate SHA-256 hash
             using (SHA256 sha256 = SHA256.Create())
