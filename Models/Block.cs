@@ -20,7 +20,7 @@ namespace SimpleBlockchainAPI.Models
         // 4. Current Block's Hash
         public string Hash { get; private set; } = string.Empty;
 
-        // 5. Salt/Nonce (New addition)
+        // 5. Salt/Nonce
         public int Nonce { get; private set; } = 0;
         
         private int Difficulty;
