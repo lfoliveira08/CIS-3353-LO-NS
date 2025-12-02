@@ -6,11 +6,13 @@
     <title>Simple Blockchain Messenger</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
-        #output { border: 1px solid #ccc; padding: 15px; margin-top: 20px; background: #f9f9f9; white-space: pre-wrap; max-height: 400px; overflow-y: scroll;}
+        #output, #searchOutput { border: 1px solid #ccc; padding: 15px; margin-top: 10px; background: #f9f9f9; white-space: pre-wrap; max-height: 400px; overflow-y: scroll;}
         h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; }
-        input[type="text"] { width: 80%; padding: 10px; margin-right: 10px; }
+        input[type="text"] { width: 70%; padding: 10px; margin-right: 10px; }
         button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
         .block { border: 1px solid #eee; padding: 10px; margin-bottom: 10px; background-color: white; }
+        .search-container { margin-bottom: 20px; }
+        .search-block { border: 2px solid #28a745; background-color: #e6ffed; padding: 15px; margin-top: 15px;}
     </style>
 </head>
 <body>
@@ -23,7 +25,17 @@
     </div>
 
     <hr>
-
+    
+    <div class="search-container">
+        <h2>🔍 Search Block by Hash</h2>
+        <input type="text" id="hashInput" placeholder="Enter full block hash...">
+        <button onclick="searchBlock()">Search</button>
+        <div id="searchOutput">
+            Search results will appear here...
+        </div>
+    </div>
+    
+    <hr>
     <h2>🔗 Blockchain Contents</h2>
     <button onclick="fetchChain()">Refresh Chain</button>
     <div id="output">
@@ -33,48 +45,91 @@
     <script>
         const API_URL = 'http://localhost:5057/blockchain'; 
 
-    // --- Function to add a new block (POST) ---
-    async function addBlock() {
-        const messageInput = document.getElementById('messageInput');
-        const message = messageInput.value.trim();
+        // --- Helper function to format block details ---
+        function formatBlock(block, isSearch = false) {
+            const blockClass = isSearch ? 'search-block' : 'block';
+            
+            const blockNumberInfo = isSearch ? '' : `<strong>Block # (Index needed for full display)</strong><br>`;
 
-        if (!message) {
-            alert("Please enter a message!");
-            return;
+            return `
+                <div class="${blockClass}">
+                    ${blockNumberInfo}
+                    <strong>Data:</strong> ${block.data}<br>
+                    <strong>Timestamp:</strong> ${new Date(block.timestamp).toLocaleString()}<br>
+                    <strong>Nonce:</strong> ${block.nonce}<br> 
+                    <strong>Previous Hash:</strong> <span style="color: #6c757d;">${block.previousHash.substring(0, 15)}...</span><br>
+                    <strong>Block Hash:</strong> <span style="color: #28a745;">${block.hash}</span>
+                </div>
+            `;
         }
 
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: {
-                    // Ensure the server knows we are sending JSON
-                    'Content-Type': 'application/json' 
-                },
-                body: JSON.stringify(message) 
-            });
-            
-            // Check for common CORS or connection issues first (status 0)
-            if (response.status === 0 && response.type === 'opaque') {
-                throw new Error("Possible CORS failure or network issue (Status 0).");
+        // --- Function to add a new block (POST) ---
+        async function addBlock() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                alert("Please enter a message!");
+                return;
             }
-            
-            // Check for specific API error status codes (400, 500, etc.)
-            if (response.ok) {
-                const result = await response.json();
-                alert(`✅ Block Added! Data: "${result.newBlock.data}". New Block Hash Starts with: ${result.newBlock.hash.substring(0, 10)}...`);
-                messageInput.value = ''; // Clear input
-                fetchChain(); // Refresh the display
-            } else {
-                // Check for a specific error message from the API
-                let errorText = await response.text();
-                alert(`Error adding block (Status: ${response.status}): ${errorText.substring(0, 100)}...`);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json' 
+                    },
+                    body: JSON.stringify(message) 
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`✅ Block Added! Data: "${result.newBlock.data}". New Block Hash Starts with: ${result.newBlock.hash.substring(0, 10)}...`);
+                    messageInput.value = '';
+                    fetchChain(); 
+                } else {
+                    let errorText = await response.text();
+                    alert(`Error adding block (Status: ${response.status}): ${errorText.substring(0, 100)}...`);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                alert('Could not connect to C# server. (Network/CORS/Server issue)');
             }
-        } catch (error) {
-            console.error('Fetch error:', error);
-            
-            alert('Could not connect to C# server. (Network/CORS/Server issue)');
         }
-    }
+
+        // --- NEW: Function to search for a block by hash (GET /blockchain/{hash}) ---
+        async function searchBlock() {
+            const hashInput = document.getElementById('hashInput');
+            const searchOutputDiv = document.getElementById('searchOutput');
+            const hash = hashInput.value.trim();
+
+            searchOutputDiv.innerHTML = 'Searching...';
+
+            if (!hash) {
+                searchOutputDiv.innerHTML = 'Please enter a valid hash.';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/${hash}`);
+
+                if (response.ok) {
+                    const block = await response.json();
+                    // Display the found block
+                    searchOutputDiv.innerHTML = formatBlock(block, true);
+                    
+                } else if (response.status === 404) {
+                    // Block not found
+                    searchOutputDiv.innerHTML = `❌ Block with hash **${hash.substring(0, 15)}...** not found in the chain.`;
+                } else {
+                    // Other errors (e.g., 400 Bad Request)
+                    searchOutputDiv.innerHTML = `Error searching for block (Status: ${response.status}): ${await response.text()}`;
+                }
+            } catch (error) {
+                console.error('Search fetch error:', error);
+                searchOutputDiv.innerHTML = 'Could not connect to C# server or network error.';
+            }
+        }
 
         // --- Function to fetch the entire chain (GET) ---
         async function fetchChain() {
@@ -86,13 +141,20 @@
                 if (response.ok) {
                     const chain = await response.json();
                     
+                    const reversedChain = chain.reverse();
+                    
                     let html = '';
-                    chain.forEach((block, index) => {
+                    reversedChain.forEach((block, index) => {
+                        // Calculate the actual block index number
+                        const blockNumber = chain.length - 1 - index; 
+
+                        // Format the block and include its index number
                         html += `
                             <div class="block">
-                                <strong>Block #${index}</strong><br>
+                                <strong>Block #${blockNumber}</strong><br>
                                 <strong>Data:</strong> ${block.data}<br>
                                 <strong>Timestamp:</strong> ${new Date(block.timestamp).toLocaleString()}<br>
+                                <strong>Nonce:</strong> ${block.nonce}<br> 
                                 <strong>Previous Hash:</strong> <span style="color: #6c757d;">${block.previousHash.substring(0, 15)}...</span><br>
                                 <strong>Block Hash:</strong> <span style="color: #28a745;">${block.hash}</span>
                             </div>
