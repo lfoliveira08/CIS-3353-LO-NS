@@ -24,22 +24,13 @@ The foundational elements and basic visualization are complete. The project is c
 | :--- | :--- | :--- |
 | **Milestone 1: Basic End-to-End Chain** | **100% Complete** | Core API, block model, and basic creation/linking logic are functional. |
 | **Milestone 2: UI Visualization & Data Compatibility** | **100% Complete** | Initial frontend visualization (`index.html`) is set up, and backend serialization is finalized. |
-| **Milestone 3: Mining Foundations & Block Lookup** | **75% Complete** | Core block model upgraded with `nonce`. Focus now is on API block lookup and frontend adaptation. |
+| **Milestone 3: Mining Foundations & Block Lookup** | **75% Complete** | Core block model upgraded with `nonce`. Focus now is on frontend adaptation. |
 
 ---
 
 ## 🎯 Current Development Focus (Milestone 3)
 
 The immediate development efforts are concentrated on completing the remaining 25% of Milestone 3, which focuses on delivering the Block Lookup feature and updating the visualization.
-
-### Revised User Story 1: Block Lookup & UI Integration
-
-**As an API User and Front-End Observer**, I want to **search for a specific block using its unique hash** via the API, **and see the result displayed on the front end**, **so that** I can quickly retrieve, verify, and visualize the block's complete details using the web interface.
-
-| Related Issue (Actual Title) | Status | Priority |
-| :--- | :--- | :--- |
-| **API: Implement 'GetBlockByHash' Service and Endpoint** | Open | High |
-| **Index.html Adaptation** | Open | High |
 
 ---
 
@@ -55,6 +46,15 @@ The immediate development efforts are concentrated on completing the remaining 2
 
 These stories summarize the functionality that has been delivered and is currently under construction.
 
+### User Story 1: Block Lookup & UI Integration
+
+**As an API User and Front-End Observer**, I want to **search for a specific block using its unique hash** via the API, **and see the result displayed on the front end**, **so that** I can quickly retrieve, verify, and visualize the block's complete details using the web interface.
+
+| Related Issue (Actual Title) | Status | Milestone |
+| :--- | :--- | :--- |
+| **API: Implement 'GetBlockByHash' Service and Endpoint** | Closed | M3: Mining Foundations... |
+| **Index.html Adaptation** | Open | M3: Mining Foundations... |
+
 ### User Story 2: Nonce Integration for Future Mining
 
 **As a Core Developer**, I want the fundamental `Block` model to include a **`nonce` field**, **so that** the framework is ready to implement a Proof-of-Work (PoW) consensus algorithm in the next phase.
@@ -63,7 +63,7 @@ These stories summarize the functionality that has been delivered and is current
 | :--- | :--- | :--- |
 | Feature: Add 'Nonce' Property to Block Model | Closed | M3: Mining Foundations... |
 | Feature: Define 'Block Data Model | Closed | M1: Basic End-to-End Chain |
-| Added Salting Logic | Closed | M3: Mining Foundations... |
+| Added Salting Logic | Closed | M3: Mining Foundations...
 
 ### User Story 3: Visualizing the Complete Chain
 
@@ -73,7 +73,6 @@ These stories summarize the functionality that has been delivered and is current
 | :--- | :--- | :--- |
 | Setup of Frontend Index.html | Closed | M2: UI Visualization... |
 | Fixing Index.html file | Closed | M2: UI Visualization... |
-| Index.html Adaptation | Open | M3: Mining Foundations... |
 
 ### User Story 4: Reliable Data Exchange
 
@@ -83,7 +82,6 @@ These stories summarize the functionality that has been delivered and is current
 | :--- | :--- | :--- |
 | Bugfix: Correct JSON Serialization in Block.cs | Closed | M2: UI Visualization... |
 | Implement Core Blockchain Services Logic (Chain, Block Creation, & Validation) | Closed | M1: Basic End-to-End Chain |
-| Index.html Adaptation | Open | M3: Mining Foundations... |
 
 ### User Story 5: Functional End-to-End API
 
@@ -159,10 +157,11 @@ Each block in our chain follows this JSON structure. Note the inclusion of the `
 {
 "timestamp": "2023-10-27T10:00:00Z",
 "data": "Secret message content...",
-"nounce": "8f9e2a...",  // Randomly generated per block
+"nounce": "8f9e2a...",  # Randomly generated per block
 "previousHash": "000abc...",
-"hash": "000123..."      // SHA-256(Index + Timestamp + Data + Nounce + PreviousHash)
+"hash": "000123..."      # SHA-256(Index + Timestamp + Data + Nounce + PreviousHash)
 }
+```
 
 
 🔮 Future Improvements
@@ -176,4 +175,4 @@ Subsequent versions of this project are planned to include:Chain Validation Endp
 
 
 📜 License
-This project is created for educational purposes for the CIS-3353 Cybersecurity course and is released under the MIT License.
+This project is created for educational purposes for the CIS-3353 Cybersecurity course and is released under the MIT License.**
