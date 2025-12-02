@@ -165,6 +165,7 @@ Each block in our chain follows this JSON structure. Note the inclusion of the `
 
 
 🔮 Future Improvements
+
 Subsequent versions of this project are planned to include:Chain Validation Endpoint: A dedicated endpoint to iterate through the chain and programmatically verify integrity.Proof of Work (PoW): Implementing a difficulty target (e.g., requiring hashes to start with 0000) to simulate mining difficulty. The core model is already prepared with the nonce property.P2P Networking: Broadcasting blocks to other nodes for decentralized operation.
 
 👥 Contributors
@@ -175,4 +176,5 @@ Subsequent versions of this project are planned to include:Chain Validation Endp
 
 
 📜 License
+
 This project is created for educational purposes for the CIS-3353 Cybersecurity course and is released under the MIT License.**
