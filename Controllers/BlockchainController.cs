@@ -47,19 +47,18 @@ namespace SimpleBlockchainAPI.Controllers
             return Ok(block);
         }
 
-        // --- NEW ENDPOINT: GET: /blockchain/isvalid (Returns the validation status) ---
+        // GET: /blockchain/isvalid (Returns the validation status) ---
         [HttpGet("isvalid")]
         public IActionResult IsValid()
         {
             bool isValid = _blockchainService.IsChainValid();
 
-            // IMPORTANT: This is the structure the JS expects!
             if (isValid)
             {
                 return Ok(new {
                     Status = "Valid",
                     Message = "✅ The blockchain is intact and valid.",
-                    IsValid = true // <-- Must be present and correctly capitalized
+                    IsValid = true
                 });
             }
             else
@@ -87,6 +86,18 @@ namespace SimpleBlockchainAPI.Controllers
                 Status = "Success", 
                 Message = $"Block added successfully with data: '{message}'",
                 NewBlock = _blockchainService.GetLatestBlock()
+            });
+        }
+
+        // --- NEW DEBUG ENDPOINT: POST: /blockchain/tamper ---
+        [HttpPost("tamper")]
+        public IActionResult Tamper()
+        {
+            _blockchainService.TamperChain();
+            
+            return Ok(new { 
+                Status = "Corrupted", 
+                Message = "Block #1 data has been modified. The chain is now invalid."
             });
         }
     }
