@@ -45,38 +45,35 @@ namespace SimpleBlockchainAPI.Services
         // Blockchain Validation
         public bool IsChainValid()
         {
-            // The chain is valid by definition if it only contains the Genesis Block
             if (Chain.Count <= 1)
             {
                 return true;
             }
 
-            try
+            // Iterate over the chain, starting from the second block (index 1)
+            for (int i = 1; i < Chain.Count; i++)
             {
-                // Iterate over the chain, starting from the second block (index 1)
-                for (int i = 1; i <  Chain.Count; i++)
+                Block currentBlock = Chain[i];
+                Block previousBlock = Chain[i - 1];
+
+                // 1. Check if the Current Block's Hash is correct (Proof of Work)
+                string recalculatedHash = currentBlock.CalculateHash();
+                
+                // --- NEW: Store the calculated hash for display ---
+                currentBlock.RecalculatedHash = recalculatedHash;
+
+                if (currentBlock.Hash != recalculatedHash)
                 {
-                    Block currentBlock = Chain[i];
-                    Block previousBlock = Chain[i - 1];
-
-                    // 1. Check if the Current Block's Hash is correct (Proof of Work)
-                    string recalculatedHash = currentBlock.CalculateHash();
-                    if (currentBlock.Hash != recalculatedHash)
-                    {
-                        return false; 
-                    }
-
-                    // 2. Check Chain Integrity
-                    if (currentBlock.PreviousHash != previousBlock.Hash)
-                    {
-                        return false;
-                    }
+                    // Validation fails on PoW check
+                    return false; 
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[CRITICAL VALIDATION ERROR]: {ex.Message}");
-                return false;
+
+                // 2. Check Chain Integrity
+                if (currentBlock.PreviousHash != previousBlock.Hash)
+                {
+                    // Validation fails on chain link check
+                    return false;
+                }
             }
 
             // If the loop completes without finding any discrepancies, the chain is valid
@@ -84,7 +81,7 @@ namespace SimpleBlockchainAPI.Services
         }
 
 
-        // --- NEW METHOD: Blockchain tampering ---
+        // --- Blockchain tampering ---
         public void TamperChain()
         {
             // We tamper with Block #1 (index 1), assuming a Genesis Block (index 0) exists.

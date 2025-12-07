@@ -22,6 +22,8 @@ namespace SimpleBlockchainAPI.Models
 
         // 5. Salt/Nonce
         public int Nonce { get; private set; } = 0;
+
+        public string RecalculatedHash { get; set; } = string.Empty;
         
         private int Difficulty;
 
