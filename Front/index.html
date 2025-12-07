@@ -9,10 +9,13 @@
         #output, #searchOutput { border: 1px solid #ccc; padding: 15px; margin-top: 10px; background: #f9f9f9; white-space: pre-wrap; max-height: 400px; overflow-y: scroll;}
         h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; }
         input[type="text"] { width: 70%; padding: 10px; margin-right: 10px; }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; margin-right: 5px;}
+        .validate-btn { background-color: #ffc107; color: black; } 
         .block { border: 1px solid #eee; padding: 10px; margin-bottom: 10px; background-color: white; }
         .search-container { margin-bottom: 20px; }
         .search-block { border: 2px solid #28a745; background-color: #e6ffed; padding: 15px; margin-top: 15px;}
+        .valid-status { color: #28a745; font-weight: bold; }
+        .invalid-status { color: #dc3545; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -38,6 +41,10 @@
     <hr>
     <h2>🔗 Blockchain Contents</h2>
     <button onclick="fetchChain()">Refresh Chain</button>
+    <button class="validate-btn" onclick="validateChain()">Validate Chain Integrity</button> 
+    <div id="validationOutput" style="margin-top: 10px;">
+        Click 'Validate Chain Integrity' to check the chain's status.
+    </div> 
     <div id="output">
         Chain will appear here...
     </div>
@@ -97,7 +104,7 @@
             }
         }
 
-        // --- NEW: Function to search for a block by hash (GET /blockchain/{hash}) ---
+        // --- Function to search for a block by hash (GET /blockchain/{hash}) ---
         async function searchBlock() {
             const hashInput = document.getElementById('hashInput');
             const searchOutputDiv = document.getElementById('searchOutput');
@@ -128,6 +135,42 @@
             } catch (error) {
                 console.error('Search fetch error:', error);
                 searchOutputDiv.innerHTML = 'Could not connect to C# server or network error.';
+            }
+        }
+
+        // --- Function to validate the entire chain (GET /blockchain/isvalid) ---
+        async function validateChain() {
+            const validationOutputDiv = document.getElementById('validationOutput');
+            validationOutputDiv.innerHTML = 'Validating...';
+            validationOutputDiv.className = ''; // Clear status classes
+
+            try {
+                const response = await fetch(`${API_URL}/isvalid`);
+
+                if (response.ok) {
+                    // Since the Network tab confirms this is valid JSON, this should succeed.
+                    const result = await response.json(); 
+
+                    // The code that handles the display:
+                    if (result.isValid) { 
+                        validationOutputDiv.innerHTML = `<span class="valid-status">${result.message}</span>`;
+                    } else {
+                        validationOutputDiv.innerHTML = `<span class="invalid-status">${result.message}</span>`;
+                    }
+                    
+                    // NOTE: I changed result.Message to result.message here to ensure it matches
+                    // the lowercase 'message' key in the JSON you provided:
+                    // {status: "Valid", message: "...", isValid: true}
+                    // If the C# serializer uses camelCase (default in modern ASP.NET Core), 
+                    // the property name will be 'message', not 'Message'.
+
+                } else {
+                    const errorText = await response.text();
+                    validationOutputDiv.innerHTML = `❌ API Error (Status: ${response.status}): ${errorText.substring(0, 100)}...`;
+                }
+            } catch (error) {
+                console.error('Validation fetch error:', error);
+                validationOutputDiv.innerHTML = 'Could not connect to C# server or network error. Check your API URL and server status.';
             }
         }
 
