@@ -23,7 +23,7 @@ namespace SimpleBlockchainAPI.Controllers
             return _blockchainService.Chain;
         }
 
-        // --- NEW ENDPOINT: GET: /blockchain/{hash} (Returns a block by its hash) ---
+        // GET: /blockchain/{hash} (Returns a block by its hash) ---
         [HttpGet("{hash}")]
         public ActionResult<Block> GetByHash(string hash)
         {
@@ -45,6 +45,31 @@ namespace SimpleBlockchainAPI.Controllers
 
             // Return 200 OK with the block data
             return Ok(block);
+        }
+
+        // --- NEW ENDPOINT: GET: /blockchain/isvalid (Returns the validation status) ---
+        [HttpGet("isvalid")]
+        public IActionResult IsValid()
+        {
+            bool isValid = _blockchainService.IsChainValid();
+
+            // IMPORTANT: This is the structure the JS expects!
+            if (isValid)
+            {
+                return Ok(new {
+                    Status = "Valid",
+                    Message = "✅ The blockchain is intact and valid.",
+                    IsValid = true // <-- Must be present and correctly capitalized
+                });
+            }
+            else
+            {
+                return Ok(new { 
+                    Status = "Invalid",
+                    Message = "❌ The blockchain has been compromised or corrupted!",
+                    IsValid = false
+                });
+            }
         }
 
         // POST: /blockchain (Adds a new message/block)

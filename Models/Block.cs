@@ -54,7 +54,6 @@ namespace SimpleBlockchainAPI.Models
             }
         }
         
-        //Salting logic (new addition)
         public void MineBlock()
         {
             // Create a target string (e.g., "000" for Difficulty=3)
