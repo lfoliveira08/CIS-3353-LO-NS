@@ -162,6 +162,44 @@ Each block in our chain follows this JSON structure. Note the inclusion of the `
 "hash": "000123..."      # SHA-256(Index + Timestamp + Data + Nounce + PreviousHash)
 }
 ```
+# 📸 Project Final Report Evidence
+
+This section maps the user interface (Frontend) visualization to the underlying API (Backend) logic, demonstrating end-to-end functionality.
+
+## 1. Blockchain State (Ledger View)
+**Objective:** Display the current state of the blockchain.
+| **Frontend (Blazor/HTML)** | **Backend (API JSON)** |
+| :--- | :--- |
+|  https://github.com/user-attachments/assets/44854996-1b97-4fcb-aef6-a69b759c56c5|  https://github.com/user-attachments/assets/6a9ec612-41eb-4d54-9a52-e53498220898 https://github.com/user-attachments/assets/2f2b2b19-20aa-431f-aca0-a0362b07ebb3|
+| *Visualized list of blocks.* | *GET `/blockchain` returning the full array.* |
+
+## 2. Feature: Search Block by Hash (Success)
+**Objective:** Retrieve a specific block using its unique SHA-256 signature.
+| **Frontend Result** | **Backend Response** |
+| :--- | :--- |
+| https://github.com/user-attachments/assets/6de2b3c4-0a2b-4ac2-a6b8-7c372c17714b | https://github.com/user-attachments/assets/83d7acd8-f8ec-49b6-9ebc-b1a84d0e9538|
+| *Block found and highlighted.* | *Returns specific block object.* |
+
+## 3. Feature: Search Block by Hash (Not Found)
+**Objective:** Handle queries for non-existent blocks.
+| **Frontend Result** | **Backend Response** |
+| :--- | :--- |
+| https://github.com/user-attachments/assets/141eeb7d-1880-4d07-978f-ac1e34006c9d | https://github.com/user-attachments/assets/730c5944-9f1f-4b7c-998b-41089a53bfd9|
+| *User-friendly error message.* | *API returns specific error string.* |
+
+## 4. Security: Chain Validation (Success)
+**Objective:** Cryptographically verify that `PreviousHash` links match the current `Hash` for all blocks.
+| **Frontend Result** | **Backend Response** |
+| :--- | :--- |
+| https://github.com/user-attachments/assets/ee8255e6-d764-4636-a179-7c94762b6944 | https://github.com/user-attachments/assets/09d541e9-1d96-4e6c-894d-e649161cb21c|
+| *System confirms integrity.* | *`"isValid": true`* |
+
+## 5. Security: Tampering Detection (Avalanche Effect)
+**Objective:** Demonstrate that altering data in a previous block breaks the chain.
+| **Frontend Result** | **Backend Response** |
+| :--- | :--- |
+| https://github.com/user-attachments/assets/aa610952-7a09-43a3-97ec-dedbb74d5905 | https://github.com/user-attachments/assets/50ff07c3-3101-448b-b7dc-677ed693b532|
+| *Red warning: Chain compromised.* | *`"isValid": false`* |
 
 
 🔮 Future Improvements
