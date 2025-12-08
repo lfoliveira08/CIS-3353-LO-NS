@@ -36,6 +36,59 @@ The project is **complete**. All planned milestones, including the security vali
 4.  **Chain Dependencies:** Each block contains the `PreviousHash` of the block preceding it.
 5.  **Tamper Detection:** The system includes logic to re-calculate hashes across the chain to verify validity (`isValid: true/false`), visually alerting the user if the ledger has been compromised.
 
+ ---
+
+## 🛠️ Tech Stack
+
+* **Language:** C# (C-Sharp)
+* **Framework:** ASP.NET Core Web API
+* **Runtime:** .NET 10.0+
+* **Cryptography:** `System.Security.Cryptography`
+* **Frontend:** HTML5 / CSS3 / JavaScript
+
+---
+
+## 📡 API Endpoints
+
+1.  **Get Full Chain** (`GET /blockchain`)
+    * Returns all blocks in chronological order.
+2.  **Mine/Create Block** (`POST /blockchain`)
+    * Body: `{"data": "Message"}`. Performs PoW and adds the block.
+3.  **Find Block by Hash** (`GET /blockchain/{hash}`)
+    * Returns a specific block object or 404.
+4.  **Validate Chain** (`GET /blockchain/isvalid`)
+    * Returns `true` if integrity is intact, `false` otherwise.
+5.  **Tamper Block** (`POST /blockchain/tamper`)
+    * **Debug Tool:** Intentionally corrupts data at index[1] to test security triggers.
+
+---
+
+## 🧩 Block Structure
+
+
+
+Each block in our chain follows this JSON structure.
+
+
+
+```json
+
+{
+
+"timestamp": "2023-10-27T10:00:00Z",
+
+"data": "Secret message content...",
+
+"nounce": "8f9e2a...",  # Randomly generated per block
+
+"previousHash": "000abc...",
+
+"hash": "000123..."      # SHA-256(Timestamp + Data + Nounce + PreviousHash)
+
+}
+
+```
+
 ---
 
 ## 👥 User Stories (Completed)
@@ -71,32 +124,6 @@ The following stories represent the full development lifecycle of the SecureChai
 * **Status:** Closed (Milestone 4)
 
 ---
-
-## 🛠️ Tech Stack
-
-* **Language:** C# (C-Sharp)
-* **Framework:** ASP.NET Core Web API
-* **Runtime:** .NET 10.0+
-* **Cryptography:** `System.Security.Cryptography`
-* **Frontend:** HTML5 / CSS3 / JavaScript
-
----
-
-## 📡 API Endpoints
-
-1.  **Get Full Chain** (`GET /blockchain`)
-    * Returns all blocks in chronological order.
-2.  **Mine/Create Block** (`POST /blockchain`)
-    * Body: `{"data": "Message"}`. Performs PoW and adds the block.
-3.  **Find Block by Hash** (`GET /blockchain/{hash}`)
-    * Returns a specific block object or 404.
-4.  **Validate Chain** (`GET /blockchain/isvalid`)
-    * Returns `true` if integrity is intact, `false` otherwise.
-5.  **Tamper Block** (`POST /blockchain/tamper`)
-    * **Debug Tool:** Intentionally corrupts data at index[1] to test security triggers.
-
----
-
 ## 📸 Project Final Report Evidence
 
 This section maps the user interface (Frontend) visualization to the underlying API (Backend) logic.
