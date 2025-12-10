@@ -179,6 +179,13 @@ Subsequent versions of this project are planned to include:
 | **Lead, Developer** | Nicholas |
 | **Developer** | Luis de Oliveira |
 
+## 📖 Contributions
+
+| Team contributor | Total story points contributed | Contribution % |
+| :--- | :--- |  :--- |
+| **Nicholas** | 32 | 51%
+| **Luis de Oliveira** | 31 | 49% |
+
 ## 📜 License
 
 This project is created for educational purposes for the **CIS-3353 Cybersecurity** course and is released under the MIT License.
